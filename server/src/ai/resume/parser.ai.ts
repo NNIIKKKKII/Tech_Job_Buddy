@@ -29,7 +29,13 @@ export const parseResume = async (resumeText: string) => {
         ]
     });
 
+
+
     const content = response.choices[0].message?.content;
+    if (!content) {
+        return { error: "No content found" }
+    }
+
 
     try {
         let json = JSON.parse(content || " {}");
