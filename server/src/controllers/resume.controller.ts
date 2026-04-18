@@ -1,8 +1,10 @@
 import { analyzeResume } from "../services/resume.service.js";
 import { Request, Response } from "express";
 
-
-export const parseResumeController = async (req: Request, res: Response) => {
+type resumeUserBody = {
+    text: string;
+}
+export const parseResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
     try {
         const { text } = req.body;
         if (!text) {
