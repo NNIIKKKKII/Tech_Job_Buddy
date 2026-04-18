@@ -28,10 +28,12 @@ export const parseResume = async (resumeText: string) => {
             }
         ]
     });
+    console.log(response.usage?.total_tokens);
 
 
 
     const content = response.choices[0].message?.content;
+
     if (!content) {
         return { error: "No content found" }
     }
