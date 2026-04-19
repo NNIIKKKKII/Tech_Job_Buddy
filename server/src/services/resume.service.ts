@@ -1,4 +1,5 @@
 import { parseResume } from "../ai/resume/parser.ai.js";
+import { improveResume } from "../ai/resume/improver.ai.js";
 
 export const analyzeResume = async (text: string) => {
     if (!text) {
@@ -7,4 +8,15 @@ export const analyzeResume = async (text: string) => {
 
     const parsedResume = await parseResume(text);
     return parsedResume;
+}
+
+export const improveResumeService = async (text: string) => {
+    if (!text) {
+        return { error: "Resume text is required" };
+    }
+    const improvedResume = await improveResume(text);
+    if (!improvedResume) {
+        return { error: "Error improving resume" };
+    }
+    return improvedResume;
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { parseResumeController } from "../controllers/resume.controller.js";
+import { parseResumeController, improveResumeController } from "../controllers/resume.controller.js";
 const router = Router();
 
 router.get("/test", (req, res) => {
@@ -7,7 +7,7 @@ router.get("/test", (req, res) => {
 });
 
 router.post("/parse", parseResumeController);
-
+router.post("/improve", improveResumeController);
 
 
 

@@ -1,9 +1,13 @@
-import { analyzeResume } from "../services/resume.service.js";
+import { analyzeResume, improveResumeService } from "../services/resume.service.js";
 import { Request, Response } from "express";
 
 type resumeUserBody = {
     text: string;
 }
+//or
+// type requestResumeUserBody = Request<{}, {}, resumeUserBody>;
+// export const parseResumeController = async (req: requestResumeUserBody, res: Response) => {
+
 export const parseResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
     try {
         const { text } = req.body;
@@ -20,5 +24,21 @@ export const parseResumeController = async (req: Request<{}, {}, resumeUserBody>
     } catch (err) {
         console.log("Error parsing resume at resumeparsecontroller", err);
         res.status(500).json({ error: "Failed to parse resume" });
+    }
+}
+
+
+export const improveResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            return res.json("Text/Resume NOT FOUND !")
+        }
+        const result = await improveResumeService(text);
+        return res.json({ improved: result })
+
+    } catch (err) {
+        console.log("Error improving resume at resumeimprovecontroller", err);
+        res.status(500).json({ error: "Failed to improve resume" });
     }
 }
