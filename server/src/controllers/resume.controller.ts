@@ -1,4 +1,4 @@
-import { analyzeResume, improveResumeService } from "../services/resume.service.js";
+import { analyzeResume, improveResumeService, scoreResumeService } from "../services/resume.service.js";
 import { Request, Response } from "express";
 
 type resumeUserBody = {
@@ -40,5 +40,21 @@ export const improveResumeController = async (req: Request<{}, {}, resumeUserBod
     } catch (err) {
         console.log("Error improving resume at resumeimprovecontroller", err);
         res.status(500).json({ error: "Failed to improve resume" });
+    }
+}
+
+
+export const scoreResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            return res.json("Text/Resume NOT FOUND !")
+        }
+        const result = await scoreResumeService(text);
+        return res.json({ result })
+
+    } catch (err) {
+        console.log("Error scoring resume at resumescorecontroller", err);
+        res.status(500).json({ error: "Failed to score resume" });
     }
 }

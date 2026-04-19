@@ -17,7 +17,6 @@ Follow this exact format:
 }
 
 Rules:
-- If something is missing, return empty array or empty string
 - Do NOT add extra fields
 - Do NOT include explanations
 `;
