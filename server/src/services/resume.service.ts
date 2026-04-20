@@ -1,7 +1,8 @@
 import { parseResume } from "../ai/resume/parser.ai.js";
 import { improveResume } from "../ai/resume/improver.ai.js";
 import { scoreResume } from "../ai/resume/scorer.ai.js";
-
+import { createEmbedding } from "../ai/core/embedding.js";
+import { pool } from "../db/client.js";
 
 export const analyzeResume = async (text: string) => {
     if (!text) {
@@ -35,3 +36,23 @@ export const scoreResumeService = async (text: string) => {
 
     return content;
 }
+
+
+
+
+export const saveResumeWithEmbedding = async (text: string) => {
+    try {
+
+        const embedding = await createEmbedding(text);
+
+        await pool.query(
+            `INSERT INTO resumes (content, embedding) VALUES ($1, $2)`,
+            [text, embedding]
+        );
+
+        return { message: "Saved successfully" };
+    } catch (err) {
+        console.log(err);
+        return { error: "Error saving resume" };
+    }
+};
