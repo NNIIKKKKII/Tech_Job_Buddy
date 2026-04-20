@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { parseResumeController, improveResumeController, scoreResumeController } from "../controllers/resume.controller.js";
+import { parseResumeController, improveResumeController, scoreResumeController, saveResumeController } from "../controllers/resume.controller.js";
 import { createEmbedding } from "../ai/core/embedding.js";
 const router = Router();
 
@@ -10,8 +10,10 @@ router.get("/test", (req, res) => {
 router.post("/parse", parseResumeController);
 router.post("/improve", improveResumeController);
 router.post("/score", scoreResumeController);
+router.post("/save", saveResumeController)
 
 
+//Test Route
 router.post("/embedding", async (req: Request, res: Response) => {
     try {
         const { text } = req.body;

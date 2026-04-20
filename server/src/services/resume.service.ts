@@ -2,7 +2,8 @@ import { parseResume } from "../ai/resume/parser.ai.js";
 import { improveResume } from "../ai/resume/improver.ai.js";
 import { scoreResume } from "../ai/resume/scorer.ai.js";
 import { createEmbedding } from "../ai/core/embedding.js";
-import { pool } from "../db/client.js";
+import { supabaseAdmin } from "../db/client.js";
+
 
 export const analyzeResume = async (text: string) => {
     if (!text) {
@@ -38,21 +39,30 @@ export const scoreResumeService = async (text: string) => {
 }
 
 
-
-
 export const saveResumeWithEmbedding = async (text: string) => {
-    try {
+    const embedding = await createEmbedding(text);
 
-        const embedding = await createEmbedding(text);
+    const { error } = await supabaseAdmin.from("resumes").insert([
+        {
+            content: text,
+            embedding: embedding,
+        },
+    ]);
 
-        await pool.query(
-            `INSERT INTO resumes (content, embedding) VALUES ($1, $2)`,
-            [text, embedding]
-        );
+    if (error) throw error;
 
-        return { message: "Saved successfully" };
-    } catch (err) {
-        console.log(err);
-        return { error: "Error saving resume" };
-    }
+    return { message: "Saved successfully" };
+};
+
+
+export const findSimilarResumes = async (text: string) => {
+    const embedding = await createEmbedding(text);
+
+    const { data, error } = await supabaseAdmin.rpc("match_resumes", {
+        query_embedding: embedding,
+    });
+
+    if (error) throw error;
+
+    return data;
 };

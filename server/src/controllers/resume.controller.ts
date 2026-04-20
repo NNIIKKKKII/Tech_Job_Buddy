@@ -1,4 +1,4 @@
-import { analyzeResume, improveResumeService, scoreResumeService } from "../services/resume.service.js";
+import { analyzeResume, improveResumeService, scoreResumeService, saveResumeWithEmbedding } from "../services/resume.service.js";
 import { Request, Response } from "express";
 
 type resumeUserBody = {
@@ -58,3 +58,18 @@ export const scoreResumeController = async (req: Request<{}, {}, resumeUserBody>
         res.status(500).json({ error: "Failed to score resume" });
     }
 }
+
+
+export const saveResumeController = async (req: Request, res: Response) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            return res.json("Text/Resume NOT FOUND !")
+        }
+        const result = await saveResumeWithEmbedding(text);
+        return res.json(result);
+    } catch (error) {
+        console.error("Error saving resume:", error);
+        return res.status(500).json({ error: "Failed to save resume" });
+    }
+};
