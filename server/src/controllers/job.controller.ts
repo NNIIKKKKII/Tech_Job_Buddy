@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { saveJob } from "../services/job.service.js";
+import { matchJob, saveJob } from "../services/job.service.js";
 
 // 1. What the frontend sends
 type JobUserBody = {
@@ -40,3 +40,15 @@ export const saveJobController = async (
         return res.status(500).json({ error: "Failed to save job" });
     }
 };
+
+export const matchJobController = async (req: Request, res: Response) => {
+    try {
+        const { text } = req.body;
+
+        const result = await matchJob(text);
+        return res.json({ result });
+    } catch (error) {
+        console.error("Error matching job:", error);
+        return res.status(500).json({ error: "Failed to match job" });
+    }
+}
