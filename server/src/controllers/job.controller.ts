@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { matchJob, saveJob } from "../services/job.service.js";
+import { matchJobsByResume, saveJob } from "../services/job.service.js";
 
 // 1. What the frontend sends
 type JobUserBody = {
@@ -43,14 +43,19 @@ export const saveJobController = async (
     }
 };
 
-export const matchJobController = async (req: Request, res: Response) => {
+export const matchJobsController = async (req, res) => {
     try {
-        const { text } = req.body;
-        console.log(req.body);
-        const result = await matchJob(text);
-        return res.json({ result });
-    } catch (error) {
-        console.error("Error matching job:", error);
-        return res.status(500).json({ error: "Failed to match job" });
+        const { resumeId } = req.body;
+
+        if (!resumeId) {
+            return res.status(400).json({ error: "resumeId is required" });
+        }
+
+        const matches = await matchJobsByResume(resumeId);
+
+        return res.json(matches);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Failed to match jobs" });
     }
-}
+};

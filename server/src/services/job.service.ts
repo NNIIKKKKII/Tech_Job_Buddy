@@ -23,26 +23,16 @@ export const saveJob = async (title: string, description: string) => {
 
 
 
-export const matchJob = async (resumeText: string) => {
-    try {
+export const matchJobsByResume = async (resumeId: string) => {
+    const { data, error } = await supabaseAdmin.rpc(
+        "match_jobs_by_resume",
+        { resume_id: resumeId }
+    );
 
-        const embedding = await createEmbedding(resumeText);
-        console.dir(embedding, { maxArrayLength: null });
-        console.log("Generated embedding length:", embedding.length);
-        const { data, error } = await supabaseAdmin.rpc("match_jobs", {
-            query_embedding: `[${embedding.join(",")}]`
-        })
-        if (error) {
-            console.log("Error from matchJob service")
-            throw error;
-        }
-        console.log("RPC result:", data);
-        return data;
-    }
-    catch (err) {
-        console.error("Error matching job:", err);
-        return { error: "Failed to match job" };
+    if (error) {
+        console.error("Match error:", error);
+        throw error;
     }
 
-
-}
+    return data;
+};
