@@ -42,16 +42,19 @@ export const scoreResumeService = async (text: string) => {
 export const saveResumeWithEmbedding = async (text: string) => {
     const embedding = await createEmbedding(text);
 
-    const { error } = await supabaseAdmin.from("resumes").insert([
+    const { data, error } = await supabaseAdmin.from("resumes").insert([
         {
             content: text,
             embedding: embedding,
         },
-    ]);
+    ]).select().single();
 
-    if (error) throw error;
-
-    return { message: "Saved successfully" };
+    if (error) {
+        console.error("Error saving resume:", error);
+        throw error;
+    }
+    console.log("Data after saving Resume: ", data);
+    return data;
 };
 
 
@@ -66,3 +69,4 @@ export const findSimilarResumes = async (text: string) => {
 
     return data;
 };
+

@@ -23,6 +23,8 @@ export const saveJobController = async (
     res: Response<ApiResponse<SaveJobSuccess>>
 ) => {
     try {
+        // console.log("OPENAI KEY:", process.env.OPENAI_API_KEY);
+        console.log(req.body);
         const { title, description } = req.body;
 
         if (!title || !description) {
@@ -31,20 +33,20 @@ export const saveJobController = async (
 
         // result is strictly inferred as { message: string }
         const result = await saveJob(title, description);
-
+        console.log("Saved Job result:", result);
         // This works perfectly because it matches SaveJobSuccess
         return res.json(result);
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error saving job:", error);
-        return res.status(500).json({ error: "Failed to save job" });
+        return res.status(500).json({ error: error.message });
     }
 };
 
 export const matchJobController = async (req: Request, res: Response) => {
     try {
         const { text } = req.body;
-
+        console.log(req.body);
         const result = await matchJob(text);
         return res.json({ result });
     } catch (error) {

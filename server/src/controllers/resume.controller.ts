@@ -65,12 +65,18 @@ export const scoreResumeController = async (req: Request, res: Response) => {
 
 export const saveResumeController = async (req: Request, res: Response) => {
     try {
-        const { text } = req.body;
+        let text = "";
+
+        if (req.file) {
+            text = await extractTextFromPDF(req.file.buffer);
+        } else {
+            text = req.body.text;
+        }
         if (!text) {
             return res.json("Text/Resume NOT FOUND !")
         }
         const result = await saveResumeWithEmbedding(text);
-        return res.json(result);
+        return res.json({ id: result.id });
     } catch (error) {
         console.error("Error saving resume:", error);
         return res.status(500).json({ error: "Failed to save resume" });

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import resumeRoutes from "./routes/resume.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 const app = express();
 
 app.use(cors());
@@ -13,7 +14,7 @@ app.get("/", (req, res) => {
 
 //ROUTES
 app.use("/api/resume", resumeRoutes);
-
+app.use("/api/job", jobRoutes);
 
 
 const PORT = 5000;

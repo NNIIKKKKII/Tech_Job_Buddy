@@ -13,7 +13,7 @@ router.get("/test", (req, res) => {
 router.post("/parse-pdf", upload.single("file"), parseResumeController);
 router.post("/improve", improveResumeController);
 router.post("/score", scoreResumeController);
-router.post("/save", saveResumeController)
+router.post("/save", upload.single("file"), saveResumeController)
 
 
 //Test Route
