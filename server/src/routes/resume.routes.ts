@@ -1,7 +1,8 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { parseResumeController, improveResumeController, scoreResumeController, saveResumeController } from "../controllers/resume.controller.js";
 import { createEmbedding } from "../ai/core/embedding.js";
 import { upload } from "../middleware/upload.js";
+import { Request, Response } from "express";
 
 const router = Router();
 
@@ -9,7 +10,7 @@ router.get("/test", (req, res) => {
     res.json({ message: "Resume route working" });
 });
 
-router.post("/parse", upload.single("resume"), parseResumeController);
+router.post("/parse-pdf", upload.single("file"), parseResumeController);
 router.post("/improve", improveResumeController);
 router.post("/score", scoreResumeController);
 router.post("/save", saveResumeController)

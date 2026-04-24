@@ -1,9 +1,7 @@
 import { analyzeResume, improveResumeService, scoreResumeService, saveResumeWithEmbedding } from "../services/resume.service.js";
 import { Request, Response } from "express";
 import { extractTextFromPDF } from "../utils/pdfParser.js";
-type resumeUserBody = {
-    text: string;
-}
+
 //or
 // type requestResumeUserBody = Request<{}, {}, resumeUserBody>;
 // export const parseResumeController = async (req: requestResumeUserBody, res: Response) => {
@@ -11,6 +9,8 @@ type resumeUserBody = {
 
 
 export const parseResumeController = async (req: Request, res: Response) => {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
     try {
         let text = "";
 
@@ -31,7 +31,7 @@ export const parseResumeController = async (req: Request, res: Response) => {
 };
 
 
-export const improveResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
+export const improveResumeController = async (req: Request, res: Response) => {
     try {
         const { text } = req.body;
         if (!text) {
@@ -47,7 +47,7 @@ export const improveResumeController = async (req: Request<{}, {}, resumeUserBod
 }
 
 
-export const scoreResumeController = async (req: Request<{}, {}, resumeUserBody>, res: Response) => {
+export const scoreResumeController = async (req: Request, res: Response) => {
     try {
         const { text } = req.body;
         if (!text) {
