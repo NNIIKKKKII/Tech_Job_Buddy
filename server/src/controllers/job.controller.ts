@@ -43,7 +43,7 @@ export const saveJobController = async (
     }
 };
 
-export const matchJobsController = async (req, res) => {
+export const matchJobsController = async (req: Request, res: Response) => {
     try {
         const { resumeId } = req.body;
 

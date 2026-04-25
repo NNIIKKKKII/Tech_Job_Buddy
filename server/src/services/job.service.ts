@@ -2,6 +2,14 @@ import { createEmbedding } from "../ai/core/embedding.js";
 import { supabaseAdmin } from "../db/client.js";
 
 
+const getMatchLabel = (score: number): string => {
+    if (score >= 0.8) return "Best Match";
+    if (score >= 0.65) return "Good Match";
+    if (score >= 0.5) return "Weak Match";
+    return "Poor Match";
+};
+
+
 export const saveJob = async (title: string, description: string) => {
     console.log("Service Title:", title);
     console.log("Service Description:", description);
@@ -34,5 +42,12 @@ export const matchJobsByResume = async (resumeId: string) => {
         throw error;
     }
 
-    return data;
+    return data.map((job: any) => {
+        return {
+            job_id: job.job_id,
+            title: job.title,
+            similarity: Number(job.similarity.toFixed(2)),
+            label: getMatchLabel(job.similarity),
+        }
+    })
 };
