@@ -32,6 +32,8 @@ export const explainJobMatch = async (resumeText: string, jobDescription: string
 
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
+            response_format: { type: "json_object" }, // 🔥 KEY LINE
+            temperature: 0.3,
             messages: [
                 {
                     role: "system",
@@ -73,7 +75,7 @@ export const explainJobMatch = async (resumeText: string, jobDescription: string
             ]
         })
         const content = response.choices[0].message.content || "";
-
+        // console.log(content);
         return safeParseJSON(content);
     } catch (err) {
         console.log(err);
