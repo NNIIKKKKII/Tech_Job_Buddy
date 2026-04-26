@@ -84,3 +84,6 @@ server/node_modules/
 server/dist/
 server/build/
 server/.env*
+
+
+src/server/temporary.txt
