@@ -1,11 +1,14 @@
-// src/services/rag.service.ts
+import { explainJobMatch } from '../ai/rag/explainMatch.ai.js';
 
-import { explainJobMatch } from "../ai/rag/explainMatch.ai.js";
 
-export const getMatchExplanation = async (
-    resume: string,
-    job: string,
-    similarity: number
-) => {
-    return await explainJobMatch(resume, job, similarity);
-};
+
+export const jobMatchRagService = async (resumeText: string, jobDescription: string, score: number) => {
+    try {
+        const response = await explainJobMatch(resumeText, jobDescription, score);
+        return response;
+
+    } catch (error) {
+        console.log(`Error from service layer`, error)
+        throw error;
+    }
+}

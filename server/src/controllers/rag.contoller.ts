@@ -1,13 +1,11 @@
-// src/controllers/rag.controller.ts
-
 import { Request, Response } from "express";
-import { getMatchExplanation } from "../services/rag.service.js";
+import { jobMatchRagService } from "../services/rag.service.js";
 
-export const explainMatchController = async (req: Request, res: Response) => {
+export const explainJobMatchController = async (req: Request, res: Response) => {
     try {
         const { resumeText, jobDescription, similarity } = req.body;
 
-        const explanation = await getMatchExplanation(
+        const explanation = await jobMatchRagService(
             resumeText,
             jobDescription,
             similarity

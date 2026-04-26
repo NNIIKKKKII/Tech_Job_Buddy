@@ -1,10 +1,8 @@
-// src/routes/rag.routes.ts
-
 import { Router } from "express";
-import { explainMatchController } from "../controllers/rag.contoller.js";
+import { explainJobMatchController } from "../controllers/rag.contoller.js";
 
 const router = Router();
 
-router.post("/explain", explainMatchController);
+router.post("/explain", explainJobMatchController);
 
 export default router;
