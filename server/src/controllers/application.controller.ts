@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+import { getApplicationStrategy } from "../services/application.service.js";
 import { createCoverLetter } from "../services/application.service.js";
 
 export const controllerCoverLetter = async (req: Request, res: Response) => {
@@ -19,4 +19,22 @@ export const controllerCoverLetter = async (req: Request, res: Response) => {
         });
     }
 
+};
+
+// src/controllers/application.controller.ts
+
+
+export const strategyController = async (req: Request, res: Response) => {
+    try {
+        const { similarity, explanation } = req.body;
+
+        const result = await getApplicationStrategy(
+            similarity,
+            explanation
+        );
+
+        res.json(result);
+    } catch {
+        res.status(500).json({ error: "Strategy failed" });
+    }
 };
