@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
 //ROUTES
 app.use("/api/resume", resumeRoutes);
 app.use("/api/job", jobRoutes);
-app.use("/api/rag", ragRoutes);
-app.use("/api/application", applicationRoutes);
+app.use("/api/rag", ragRoutes); // for resume explanations
+app.use("/api/application", applicationRoutes); // for cover letter
 
 const PORT = 5000;
 app.listen(PORT, () => {
