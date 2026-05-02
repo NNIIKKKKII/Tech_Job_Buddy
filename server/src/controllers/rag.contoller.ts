@@ -13,6 +13,7 @@ export const explainJobMatchController = async (req: Request, res: Response) => 
 
         res.json({ explanation });
     } catch (err) {
+        console.error("RAG Controller Error:", err);
         res.status(500).json({ error: "Failed to generate explanation" });
     }
 };
