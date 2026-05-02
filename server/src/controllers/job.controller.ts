@@ -44,18 +44,22 @@ export const saveJobController = async (
 };
 
 export const matchJobsController = async (req: Request, res: Response) => {
+    console.log("BODY:", req.body);
     try {
+        if (!req.body) {
+            return res.status(400).json({ error: "Invalid JSON body" });
+        }
+
         const { resumeId } = req.body;
 
         if (!resumeId) {
             return res.status(400).json({ error: "resumeId is required" });
         }
 
-        const matches = await matchJobsByResume(resumeId);
+        const result = await matchJobsByResume(resumeId);
 
-        return res.json(matches);
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to match jobs" });
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong" });
     }
 };

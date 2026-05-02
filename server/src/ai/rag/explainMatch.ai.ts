@@ -75,6 +75,7 @@ export const explainJobMatch = async (resumeText: string, jobDescription: string
             ]
         })
         const content = response.choices[0].message.content || "";
+        console.log(`MATCH EXPLAIN TOKENS : ${response.usage?.total_tokens}`);
         // console.log(content);
         return safeParseJSON(content);
     } catch (err) {

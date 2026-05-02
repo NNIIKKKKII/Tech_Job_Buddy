@@ -64,6 +64,7 @@ ${explanation.gaps}
         });
 
         const content = response.choices[0].message.content || "";
+        console.log(`STRATEGY TOKENS : ${response.usage?.total_tokens}`);
         return extractJSON(content);
 
 
