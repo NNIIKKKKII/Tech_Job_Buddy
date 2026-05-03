@@ -47,7 +47,7 @@ export const generateCoverLetter = async (resumeText: string, jobDescription: st
 
 
         })
-        console.log(response.usage?.total_tokens)
+        console.log(`COVER LETTER TOKENS : ${response.usage?.total_tokens}`);
         return response.choices[0].message?.content || "";
 
     } catch (error) {
