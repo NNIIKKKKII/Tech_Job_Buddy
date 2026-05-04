@@ -27,7 +27,7 @@ const safeParseJSON = (text: string) => {
 };
 
 
-export const explainJobMatch = async (resumeText: string, jobDescription: string, similarity: number) => {
+export const explainJobMatch = async (resumeText: string, jobDescription: string, similarity: number, label: string) => {
     try {
 
         const response = await openai.chat.completions.create({
@@ -37,40 +37,45 @@ export const explainJobMatch = async (resumeText: string, jobDescription: string
             messages: [
                 {
                     role: "system",
-                    content: `You are a brutally honest career advisor. 
-                    Your job is to analyze how well a candidate's resume matches a job description.
-                    
-                    You must return ONLY valid JSON in this exact format:
-                    {
-                        "matchStrength": "strong" | "moderate" | "partial",
-                        "summary": "2-sentence max summary of overall fit",
-                        "matchingSkills": ["skill1", "skill2"],
-                        "matchingExperience": ["specific overlap point 1", "specific overlap point 2"],
-                        "gaps": ["gap1", "gap2"],
-                        "recommendation": "one clear, actionable sentence on what the candidate should do"
-                        }
-                        
-                        Rules:
-                        - matchingSkills: only list skills EXPLICITLY present in BOTH resume and job description
-                        - matchingExperience: describe actual overlap in experience, not generic statements
-                        - gaps: list skills or experience the job requires but resume is missing
-                        - recommendation: be direct, not motivational
-                        - Never hallucinate skills that aren't in the resume
-                        - Never be generic ("you have great communication skills")`
+                    content: `
+You are a career advisor AI.
+
+You MUST follow the given match label strictly.
+
+Match Label meanings:
+- "Best Match" → strong alignment
+- "Good Match" → moderate alignment
+- "Weak Match" → partial alignment with clear gaps
+- "Poor Match" → low relevance
+
+Return ONLY JSON:
+
+{
+  "matchSummary": string,
+  "strengths": string[],
+  "gaps": string[],
+  "improvements": string[]
+}
+
+Rules:
+- Your explanation MUST match the label
+- If label is "Weak Match", DO NOT say "strong match"
+- Be realistic, not optimistic
+- Focus on actual overlap
+`
                 },
                 {
                     role: "user",
                     content: `
-                        Resume:
-                        ${resumeText}
-                        
-                        Job Description:
-                        ${jobDescription}
-                        
-                        Similarity Score: ${similarity}
-                        
-                        Explain why this is a good match.
-                        `,
+Match Label: ${label}
+Similarity Score: ${similarity}
+
+Resume:
+${resumeText}
+
+Job Description:
+${jobDescription}
+`
                 },
             ]
         })

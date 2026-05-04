@@ -149,12 +149,13 @@ export const matchJobsByResume = async (resumeId: string) => {
             const fullJob = jobsFull?.find((j: any) => j.id === job.job_id);
 
             const similarity = job.similarity;
-
+            const label = getMatchLabel(similarity);
             // 1. explanation
             const explanation = await explainJobMatch(
                 resumeText,
                 fullJob?.description || "",
-                similarity
+                similarity,
+                label
             );
 
             // 2. strategy
